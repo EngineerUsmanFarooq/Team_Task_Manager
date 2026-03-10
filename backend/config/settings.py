@@ -111,6 +111,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://team-task-manager-git-main-engineerusmanfarooqs-projects.vercel.app",
+    "https://team-task-manager-six.vercel.app",
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
+]
 
 # Production Cookie Settings for Cross-Site (Vercel to Render)
 SESSION_COOKIE_SAMESITE = 'None'

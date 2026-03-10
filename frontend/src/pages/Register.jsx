@@ -10,7 +10,7 @@ function Register() {
   const register = async () => {
     try {
       const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      const res = await axios.post(`${baseUrl}/auth/register/`, { username, password });
+      const res = await axios.post(`${baseUrl}/auth/register/`, { username, password }, { withCredentials: true });
       alert("Account created successfully! Please login.");
       navigate("/");
     } catch (error) {
