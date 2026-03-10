@@ -1,19 +1,22 @@
 import os
 from pathlib import Path
 
-# Use try-except to handle the missing package locally
+# Smart Imports for Production Packages
 try:
     import dj_database_url
 except ImportError:
     dj_database_url = None
 
+try:
+    import whitenoise
+except ImportError:
+    whitenoise = None
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# Use a fallback for local development so it doesn't crash
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-123')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
@@ -38,7 +41,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
+]
+
+# Only add WhiteNoise if it's installed (for production)
+if whitenoise:
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+
+MIDDLEWARE += [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,7 +76,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Smart Database Config: Use dj_database_url if available, otherwise SQLite
+# Database
 if dj_database_url:
     DATABASES = {
         'default': dj_database_url.config(
