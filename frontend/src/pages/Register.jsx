@@ -5,11 +5,12 @@ import { useNavigate, Link } from "react-router-dom";
 function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const register = async () => {
     try {
-      const res = await api.post("/auth/register/", { username, password });
+      const res = await api.post("/auth/register/", { username, email, password });
       localStorage.setItem("user", JSON.stringify(res.data));
       alert("Account created successfully!");
       navigate("/dashboard");
@@ -34,6 +35,16 @@ function Register() {
               className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder-gray-400"
               placeholder="Pick a username"
               onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <input
+              type="email"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder-gray-400"
+              placeholder="your@email.com"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 

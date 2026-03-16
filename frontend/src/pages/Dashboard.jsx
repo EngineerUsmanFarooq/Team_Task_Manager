@@ -10,6 +10,7 @@ function Dashboard() {
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
+  const currentUser = JSON.parse(localStorage.getItem("user"))?.username;
 
   const fetchTasks = () => {
     api.get("/api/tasks/").then((res) => setTasks(res.data));
@@ -51,7 +52,7 @@ function Dashboard() {
       <main className="max-w-6xl mx-auto p-6 md:p-10">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Your Tasks</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome, {currentUser}!</h1>
             <p className="text-gray-500 mt-1">Manage and track your team's progress</p>
           </div>
           <button

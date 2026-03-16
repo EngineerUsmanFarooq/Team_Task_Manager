@@ -31,22 +31,28 @@ def register(request):
     try:
         username = request.data.get("username")
         password = request.data.get("password")
+        email = request.data.get("email") # Added email
         
-        if not username or not password:
-            return Response({"error": "Username and password required"}, status=400)
+        if not username or not password or not email:
+            return Response({"error": "Username, email, and password required"}, status=400)
             
         if User.objects.filter(username=username).exists():
             return Response({"error": "Username already exists"}, status=400)
+            
+        if User.objects.filter(email=email).exists():
+            return Response({"error": "Email already exists"}, status=400)
 
         user = User.objects.create_user(
             username=username,
-            password=password
+            password=password,
+            email=email # Saved email
         )
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             "message": "User created",
             "token": token.key,
-            "username": user.username
+            "username": user.username,
+            "email": user.email
         }, status=201)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
@@ -58,6 +64,7 @@ def user_login(request):
     try:
         username = request.data.get("username")
         password = request.data.get("password")
+        # We still login via username, but we will return the email too
 
         user = authenticate(username=username, password=password)
 
@@ -66,7 +73,8 @@ def user_login(request):
             return Response({
                 "message": "Login success", 
                 "token": token.key,
-                "username": user.username
+                "username": user.username,
+                "email": user.email
             })
 
         return Response({"error": "Invalid credentials"}, status=401)

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const currentUser = JSON.parse(localStorage.getItem("user"))?.username;
+
   const logout = () => {
     localStorage.removeItem("user");
     window.location.href = "/";
@@ -26,6 +28,13 @@ function Navbar() {
         <Link to="/teams" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
           Teams
         </Link>
+        
+        {currentUser && (
+          <span className="text-blue-600 font-bold px-3 py-1 bg-blue-50 rounded-full text-sm">
+            {currentUser}
+          </span>
+        )}
+
         <button
           onClick={logout}
           className="bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-red-50 hover:text-red-600 transition-all border border-gray-200"
