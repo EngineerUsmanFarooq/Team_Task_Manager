@@ -4,12 +4,12 @@ import {useNavigate, Link} from "react-router-dom"
 
 function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const login = async () => {
     try {
-      const res = await api.post("/auth/login/", { username, password });
+      const res = await api.post("/auth/login/", { email, password });
       localStorage.setItem("user", JSON.stringify(res.data));
       navigate("/dashboard");
     } catch (error) {
@@ -28,11 +28,12 @@ function Login() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
             <input
+              type="email"
               className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400"
-              placeholder="Enter your username"
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="your@email.com"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 

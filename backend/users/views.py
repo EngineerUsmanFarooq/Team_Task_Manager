@@ -31,7 +31,7 @@ def register(request):
     try:
         username = request.data.get("username")
         password = request.data.get("password")
-        email = request.data.get("email") # Added email
+        email = request.data.get("email")
         
         if not username or not password or not email:
             return Response({"error": "Username, email, and password required"}, status=400)
@@ -45,7 +45,7 @@ def register(request):
         user = User.objects.create_user(
             username=username,
             password=password,
-            email=email # Saved email
+            email=email
         )
         token, created = Token.objects.get_or_create(user=user)
         return Response({
@@ -62,9 +62,17 @@ def register(request):
 @permission_classes([AllowAny])
 def user_login(request):
     try:
-        username = request.data.get("username")
+        email = request.data.get("email")
         password = request.data.get("password")
-        # We still login via username, but we will return the email too
+
+        if not email or not password:
+            return Response({"error": "Email and password required"}, status=400)
+
+        try:
+            user_obj = User.objects.get(email=email)
+            username = user_obj.username
+        except User.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=401)
 
         user = authenticate(username=username, password=password)
 
